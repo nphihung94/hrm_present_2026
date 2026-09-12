@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HRM + AI — Hành trình nhân sự thông minh</title>
+<style>
+:root{
+  --color-primary:#2563eb;
+  --color-primary-soft:#dbeafe;
+  --color-ink:#0f172a;
+  --color-ink-soft:#475569;
+  --color-background:#f6f8fc;
+  --color-card:#ffffff;
+  --color-line:#e2e8f0;
+  --color-accent-green:#059669;
+  --color-accent-amber:#d97706;
+  --color-accent-purple:#7c3aed;
+  --grad-primary:linear-gradient(135deg,#1d4ed8,#7c3aed);
+  --font-heading:'Segoe UI',system-ui,-apple-system,sans-serif;
+  --font-body:'Segoe UI',system-ui,-apple-system,sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#e9edf5;color:var(--color-ink);font-family:var(--font-body);overflow:hidden}
+.slide-deck{position:relative;width:100vw;height:100vh;overflow:hidden}
+@media(min-width:769px){.slide-deck{max-width:calc(100vh*16/9);max-height:calc(100vw*9/16);margin:auto;position:absolute;inset:0}}
+.slide{position:absolute;width:100%;height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:44px 56px 64px;opacity:0;visibility:hidden;transition:opacity .35s;background:var(--color-background);overflow:hidden}
+.slide.active{opacity:1;visibility:visible}
+.slide-content{width:100%;max-width:100%;max-height:100%;display:flex;flex-direction:column;gap:14px}
+
+/* ---------- shared parts ---------- */
+.slide-kicker{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--color-primary)}
+.slide-kicker .kicker-app-chip{background:var(--color-primary-soft);border-radius:999px;padding:3px 12px;letter-spacing:.04em}
+.slide-heading{font-family:var(--font-heading);font-size:clamp(24px,3.2vw,40px);line-height:1.15;font-weight:800}
+.slide-heading .heading-highlight{background:var(--grad-primary);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.slide-body-grid{display:grid;grid-template-columns:5fr 7fr;gap:28px;align-items:center;min-height:0;flex:1;overflow:hidden}
+.slide-body-grid.grid-flip{grid-template-columns:7fr 5fr}
+.slide-body-grid>*{min-height:0;max-height:100%}
+.talk-points{display:flex;flex-direction:column;gap:12px}
+.talk-point{display:flex;gap:12px;align-items:flex-start;background:var(--color-card);border:1px solid var(--color-line);border-radius:12px;padding:12px 14px;box-shadow:0 1px 2px rgba(15,23,42,.05)}
+.talk-point .point-icon{flex:0 0 auto;width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;background:var(--color-primary-soft);color:var(--color-primary)}
+.talk-point .point-icon svg{width:18px;height:18px}
+.talk-point .point-title{font-weight:700;font-size:15px}
+.talk-point .point-desc{font-size:13.5px;color:var(--color-ink-soft);line-height:1.45;margin-top:2px}
+.talk-point.point-ai .point-icon{background:#ede9fe;color:var(--color-accent-purple)}
+.talk-point.point-vision{border-style:dashed;border-color:#c4b5fd;background:#faf8ff}
+.shot-stack{display:flex;flex-direction:column;gap:12px;min-height:0;justify-content:center}
+.shot-frame{background:var(--color-card);border:1px solid var(--color-line);border-radius:12px;overflow:hidden;box-shadow:0 12px 30px -12px rgba(15,23,42,.25);cursor:zoom-in}
+.shot-frame .shot-titlebar{display:flex;align-items:center;gap:6px;padding:7px 12px;border-bottom:1px solid var(--color-line);background:#f8fafc}
+.shot-titlebar .shot-dot{width:9px;height:9px;border-radius:50%;background:#e2e8f0}
+.shot-titlebar .shot-dot:nth-child(1){background:#fca5a5}
+.shot-titlebar .shot-dot:nth-child(2){background:#fcd34d}
+.shot-titlebar .shot-dot:nth-child(3){background:#86efac}
+.shot-titlebar .shot-url{margin-left:8px;font-size:11px;color:var(--color-ink-soft);background:#eef2f7;border-radius:6px;padding:2px 10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.shot-frame img{display:block;width:100%;height:auto;max-height:36vh;object-fit:cover;object-position:top left}
+.shot-frame.shot-secondary{width:78%;align-self:flex-end;margin-top:0}
+.shot-frame.shot-secondary img{max-height:24vh}
+.shot-caption{font-size:12px;color:var(--color-ink-soft);text-align:right}
+.timing-badge{position:absolute;top:20px;right:26px;font-size:12px;font-weight:600;color:var(--color-ink-soft);background:var(--color-card);border:1px solid var(--color-line);border-radius:999px;padding:4px 12px;display:flex;align-items:center;gap:6px}
+.timing-badge svg{width:13px;height:13px}
+.footer-strip{position:absolute;bottom:18px;left:56px;right:56px;display:flex;justify-content:space-between;font-size:11.5px;color:#94a3b8}
+
+/* ---------- title slide ---------- */
+.title-slide{background:radial-gradient(1100px 500px at 75% -10%,#dbeafe 0%,transparent 60%),radial-gradient(900px 500px at 10% 110%,#ede9fe 0%,transparent 55%),var(--color-background);text-align:center;justify-content:center}
+.title-main{font-size:clamp(36px,5.2vw,64px);font-weight:900;line-height:1.08;font-family:var(--font-heading)}
+.title-main .heading-highlight{background:var(--grad-primary);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.title-sub{font-size:clamp(15px,1.7vw,20px);color:var(--color-ink-soft);max-width:760px;margin:0 auto}
+.journey-strip{display:flex;align-items:stretch;justify-content:center;gap:0;margin-top:26px}
+.journey-step{display:flex;flex-direction:column;align-items:center;gap:8px;background:var(--color-card);border:1px solid var(--color-line);border-radius:14px;padding:16px 20px;min-width:150px;box-shadow:0 8px 20px -12px rgba(15,23,42,.25)}
+.journey-step .step-icon{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center}
+.journey-step .step-icon svg{width:21px;height:21px}
+.journey-step .step-app{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#94a3b8}
+.journey-step .step-name{font-size:14.5px;font-weight:700}
+.journey-arrow{display:flex;align-items:center;padding:0 8px;color:#94a3b8}
+.journey-arrow svg{width:18px;height:18px}
+.step-icon.icon-workforce{background:#dbeafe;color:#2563eb}
+.step-icon.icon-hris{background:#dcfce7;color:#059669}
+.step-icon.icon-career{background:#fef3c7;color:#d97706}
+.step-icon.icon-timesheet{background:#fee2e2;color:#dc2626}
+.step-icon.icon-payroll{background:#ede9fe;color:#7c3aed}
+
+/* ---------- closing slide ---------- */
+.closing-grid{display:grid;grid-template-columns:1fr 1fr;gap:26px;align-items:start;margin-top:8px}
+.recap-list{display:flex;flex-direction:column;gap:9px}
+.recap-item{display:flex;gap:10px;align-items:center;background:var(--color-card);border:1px solid var(--color-line);border-radius:10px;padding:10px 13px;font-size:14px}
+.recap-item .recap-num{flex:0 0 auto;width:24px;height:24px;border-radius:50%;background:var(--color-primary-soft);color:var(--color-primary);font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.safety-card{background:linear-gradient(160deg,#eff6ff,#faf5ff);border:1px solid #c7d2fe;border-radius:16px;padding:20px 22px;display:flex;flex-direction:column;gap:12px}
+.safety-card .safety-title{display:flex;align-items:center;gap:10px;font-weight:800;font-size:17px}
+.safety-card .safety-title svg{width:20px;height:20px;color:var(--color-accent-purple)}
+.safety-rule{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;color:var(--color-ink-soft);line-height:1.5}
+.safety-rule svg{flex:0 0 auto;width:16px;height:16px;margin-top:2px;color:var(--color-accent-green)}
+
+/* ---------- nav & lightbox ---------- */
+.progress-bar{position:fixed;top:0;left:0;height:3px;background:var(--grad-primary);transition:width .3s;z-index:1000}
+.nav-controls{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:14px;z-index:1000}
+.nav-btn{background:#fff;border:1px solid var(--color-line);color:var(--color-ink);width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:16px;box-shadow:0 2px 8px rgba(15,23,42,.12)}
+.nav-btn:hover{background:var(--color-primary-soft)}
+.slide-counter{color:var(--color-ink-soft);font-size:13px}
+.shot-lightbox{position:fixed;inset:0;background:rgba(15,23,42,.82);display:none;align-items:center;justify-content:center;z-index:2000;cursor:zoom-out;padding:3vh 3vw}
+.shot-lightbox.open{display:flex}
+.shot-lightbox img{max-width:100%;max-height:100%;border-radius:10px;box-shadow:0 30px 80px rgba(0,0,0,.5)}
+</style>
+</head>
+<body>
+<div class="progress-bar" id="progressBar"></div>
+<div class="slide-deck">
+
+<!-- ============ SLIDE 1 · TITLE ============ -->
+<div class="slide title-slide active">
+  <div class="timing-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>0:00 – 1:00</div>
+  <div class="slide-content">
+    <div class="title-main">Bộ HRM + AI<br><span class="heading-highlight">Hành trình nhân sự thông minh</span></div>
+    <p class="title-sub">5 ứng dụng — một hành trình liền mạch: từ chiếc ghế trong sơ đồ tổ chức, hồ sơ nhân viên, lộ trình sự nghiệp, ca kíp làm việc, đến đồng lương cuối tháng. Và một lớp AI copilot xuyên suốt.</p>
+    <div class="journey-strip">
+      <div class="journey-step"><div class="step-icon icon-workforce"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="8.5" y="14" width="7" height="7" rx="1"/><path d="M6.5 10v2h11v-2M12 12v2"/></svg></div><div class="step-app">Workforce</div><div class="step-name">Tổ chức &amp; Vị trí</div></div>
+      <div class="journey-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></div>
+      <div class="journey-step"><div class="step-icon icon-hris"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="step-app">HRIS</div><div class="step-name">Hồ sơ &amp; Vòng đời</div></div>
+      <div class="journey-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></div>
+      <div class="journey-step"><div class="step-icon icon-career"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg></div><div class="step-app">Career</div><div class="step-name">Lộ trình &amp; Thăng tiến</div></div>
+      <div class="journey-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></div>
+      <div class="journey-step"><div class="step-icon icon-timesheet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div><div class="step-app">Timesheets</div><div class="step-name">Ca kíp &amp; Công</div></div>
+      <div class="journey-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></div>
+      <div class="journey-step"><div class="step-icon icon-payroll"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 12h.01M18 12h.01"/></svg></div><div class="step-app">Payrolls</div><div class="step-name">Công lương</div></div>
+    </div>
+  </div>
+  <div class="footer-strip"><span>Rework HRM Suite</span><span>Demo trên môi trường thật — mọi màn hình là sản phẩm đang chạy</span></div>
+</div>
+
+<!-- ============ SLIDE 2 · AI TRONG SƠ ĐỒ TỔ CHỨC ============ -->
+<div class="slide">
+  <div class="timing-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>1:00 – 2:15</div>
+  <div class="slide-content">
+    <div class="slide-kicker"><span class="kicker-app-chip">Workforce</span> Slide 2 · Nhân sự AI trong sơ đồ tổ chức</div>
+    <div class="slide-heading">Khi <span class="heading-highlight">AI agent có một chiếc ghế</span> trong tổ chức — với JD như con người</div>
+    <div class="slide-body-grid">
+      <div class="talk-points">
+        <div class="talk-point"><div class="point-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="8.5" y="14" width="7" height="7" rx="1"/></svg></div><div><div class="point-title">Tổ chức xây trên "Vị trí", không phải tên người</div><div class="point-desc">Mỗi ô trong sơ đồ là một chiếc ghế có ngân sách (seat): JD, cấp bậc, lương mục tiêu, trạng thái mở/đã lấp — trả lời được "còn thiếu ai, ai kế nhiệm".</div></div></div>
+        <div class="talk-point"><div class="point-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg></div><div><div class="point-title">Hồ sơ công việc chuẩn hoá cho từng ghế</div><div class="point-desc">JD, yêu cầu năng lực, nhóm nghề, tỷ lệ lấp đầy — nhân viên nào (người hay máy) ngồi ghế nào cũng đo được bằng cùng một thước.</div></div></div>
+        <div class="talk-point point-ai point-vision"><div class="point-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 15l.9 2.4L22 18.3l-2.1.9L19 21.5l-.9-2.3-2.1-.9 2.1-.9z"/></svg></div><div><div class="point-title">Tầm nhìn: "Nhân sự AI" là một loại hình lao động</div><div class="point-desc">Thêm loại vị trí <b>AI agent</b> bên cạnh full-time/part-time: AI ngồi vào ghế, nhận JD, có KPI, có quản lý trực tiếp — nền tảng seat-based đã sẵn sàng cho điều đó.</div></div></div>
+      </div>
+      <div class="shot-stack">
+        <div class="shot-frame"><div class="shot-titlebar"><span class="shot-dot"></span><span class="shot-dot"></span><span class="shot-dot"></span><span class="shot-url">workforce · Sơ đồ tổ chức — dạng cây</span></div><img src="shots/workforce-org-chart.jpg" alt="Sơ đồ tổ chức dạng cây"></div>
+        <div class="shot-frame shot-secondary"><div class="shot-titlebar"><span class="shot-dot"></span><span class="shot-dot"></span><span class="shot-dot"></span><span class="shot-url">workforce · Hồ sơ công việc — vị trí đã lấp / còn mở</span></div><img src="shots/workforce-job-profile-detail.jpg" alt="Chi tiết hồ sơ công việc"></div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-strip"><span>Workforce — sơ đồ tổ chức theo vị trí</span><span>2</span></div>
+</div>
+
+<!-- ============ SLIDE 3 · CAREER TRACK + AI ============ -->
+<div class="slide">
+  <div class="timing-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>2:15 – 3:30</div>
+  <div class="slide-content">
+    <div class="slide-kicker"><span class="kicker-app-chip">Career</span> Slide 3 · Career Track với AI</div>
+    <div class="slide-heading">Lộ trình sự nghiệp là một <span class="heading-highlight">bản đồ sống</span> — AI vẽ giúp bạn</div>
+    <div class="slide-body-grid grid-flip">
+      <div class="shot-stack">
+        <div class="shot-frame"><div class="shot-titlebar"><span class="shot-dot"></span><span class="shot-dot"></span><span class="shot-dot"></span><span class="shot-url">career · Track Engineering — 11 vai trò · 15 bước chuyển</span></div><img src="shots/career-track-graph.jpg" alt="Đồ thị lộ trình sự nghiệp Engineering"></div>
+        <div class="shot-frame shot-secondary"><div class="shot-titlebar"><span class="shot-dot"></span><span class="shot-dot"></span><span class="shot-dot"></span><span class="shot-url">career · Chi tiết vai trò — nhánh IC / nhánh quản lý</span></div><img src="shots/career-role-inspector.jpg" alt="Inspector vai trò Senior Software Engineer"></div>
+      </div>
+      <div class="talk-points">
+        <div class="talk-point"><div class="point-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5" cy="6" r="2.5"/><circle cx="19" cy="6" r="2.5"/><circle cx="12" cy="18" r="2.5"/><path d="M7 7.5l3.5 8M17 7.5l-3.5 8"/></svg></div><div><div class="point-title">Track = đồ thị các bước chuyển vai trò</div><div class="point-desc">Kéo–thả, nối vai trò, gắn yêu cầu năng lực cho từng bước chuyển. Một điểm Start định nghĩa các cửa vào; nhánh IC và nhánh quản lý tách rõ.</div></div></div>
+        <div class="talk-point point-ai"><div class="point-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/></svg></div><div><div class="point-title">AI dựng cả track từ một câu mô tả</div><div class="point-desc">"Tạo lộ trình cho đội Data 4 cấp, tách nhánh quản lý từ Senior" → AI sinh vai trò, bước chuyển, năng lực yêu cầu, khớp với danh mục job profile/grade của công ty rồi chờ bạn xác nhận.</div></div></div>
+        <div class="talk-point point-ai"><div class="point-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></div><div><div class="point-title">Nhân viên hỏi — AI trả lời bằng chính track</div><div class="point-desc">"Từ vị trí của tôi đi tiếp được đâu?" → AI liệt kê các vai trò kế tiếp kèm năng lực còn thiếu, lấy đúng từ đồ thị track, không bịa.</div></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-strip"><span>Career — Tracks &amp; Copilot</span><span>3</span></div>
+</div>
+
+<!-- ============ SLIDE 4 · PROMOTION + AI ============ -->
+<div class="slide">
+  <div class="timing-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>3:30 – 4:45</div>
+  <div class="slide-content">
+    <div class="slide-kicker"><span class="kicker-app-chip">Career</span> Slide 4 · Thăng chức với đề xuất tổng hợp của AI</div>
+    <div class="slide-heading">Một đề xuất thăng chức <span class="heading-highlight">kể được câu chuyện và chứng minh được con số</span></div>
+    <div class="slide-body-grid">
+      <div class="talk-points">
+        <div class="talk-point"><div class="point-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></div><div><div class="point-title">Canvas viết đề xuất + bảng so sánh Từ → Đến</div><div class="point-desc">Bên trái là lý lẽ ("what did they deliver, why now"), bên phải là con số: lương gộp, lương cơ bản, từng khoản phụ cấp với chênh lệch tính sẵn.</div></div></div>
+        <div class="talk-point"><div class="point-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div><div><div class="point-title">Luồng duyệt theo chính sách, có SLA</div><div class="point-desc">Chuỗi duyệt cấu hình theo từng chính sách (quản lý trực tiếp → hội đồng), SLA 3 ngày ra quyết định; duyệt xong tự ghi ngược về HRIS.</div></div></div>
+        <div class="talk-point point-ai"><div class="point-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/></svg></div><div><div class="point-title">AI tổng hợp bản nháp đề xuất</div><div class="point-desc">"Đề xuất thăng chức cho Drake theo chính sách Engineering" → AI xác định nhân viên + chính sách, mở sẵn form đã điền tóm tắt thành tích; con người rà soát và bấm gửi — AI không bao giờ tự gửi.</div></div></div>
+      </div>
+      <div class="shot-stack">
+        <div class="shot-frame"><div class="shot-titlebar"><span class="shot-dot"></span><span class="shot-dot"></span><span class="shot-dot"></span><span class="shot-url">career · Chính sách thăng chức Engineering — tỷ lệ duyệt 100%, tăng lương TB +17.8%</span></div><img src="shots/career-promotion-policy.jpg" alt="Trang chính sách thăng chức"></div>
+        <div class="shot-frame shot-secondary"><div class="shot-titlebar"><span class="shot-dot"></span><span class="shot-dot"></span><span class="shot-dot"></span><span class="shot-url">career · Đề xuất mới — headline + gói lương Từ→Đến</span></div><img src="shots/career-promotion-proposal.jpg" alt="Form đề xuất thăng chức"></div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-strip"><span>Career — Promotion records</span><span>4</span></div>
+</div>
+
+<!-- ============ SLIDE 5 · ĐẢM BẢO NHÂN SỰ / TIMEOFF ============ -->
+<div class="slide">
+  <div class="timing-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>4:45 – 6:00</div>
+  <div class="slide-content">
+    <div class="slide-kicker"><span class="kicker-app-chip">Timesheets</span> Slide 5 · Đảm bảo quân số &amp; duyệt nghỉ phép với copilot</div>
+    <div class="slide-heading">Duyệt một đơn nghỉ phép là một <span class="heading-highlight">quyết định về độ phủ ca</span></div>
+    <div class="slide-body-grid grid-flip">
+      <div class="shot-stack">
+        <div class="shot-frame"><div class="shot-titlebar"><span class="shot-dot"></span><span class="shot-dot"></span><span class="shot-dot"></span><span class="shot-url">timesheets · Lịch phủ ca — 990 chỗ trống, nút "Lấp chỗ trống"</span></div><img src="shots/timesheet-coverage-schedule.jpg" alt="Lịch coverage với chỗ trống"></div>
+        <div class="shot-frame shot-secondary"><div class="shot-titlebar"><span class="shot-dot"></span><span class="shot-dot"></span><span class="shot-dot"></span><span class="shot-url">timesheets · Nghỉ phép — trạng thái duyệt theo chính sách</span></div><img src="shots/timesheet-timeoff-requests.jpg" alt="Danh sách yêu cầu nghỉ phép"></div>
+      </div>
+      <div class="talk-points">
+        <div class="talk-point"><div class="point-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div><div><div class="point-title">Nhìn thấy lỗ hổng quân số trước khi nó xảy ra</div><div class="point-desc">Lịch phủ ca đếm từng chỗ trống theo ngày; động cơ xếp ca 3 lượt (mẫu lịch → lấp trống → ca mở) đề xuất người phù hợp theo giờ đã làm và độ công bằng.</div></div></div>
+        <div class="talk-point"><div class="point-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div><div><div class="point-title">Nghỉ phép: sổ cái số dư + luồng duyệt + uỷ quyền</div><div class="point-desc">Đơn nghỉ chạy qua workflow duyệt (có uỷ quyền người duyệt); khi duyệt, chính sách được "đóng băng" và ngày nghỉ đổ thẳng vào bảng công tính lương.</div></div></div>
+        <div class="talk-point point-ai"><div class="point-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/></svg></div><div><div class="point-title">Copilot của người xếp ca</div><div class="point-desc">AI cảnh báo ca thiếu người, gợi ý ai nên nhận ca trống, soạn cả chính sách nghỉ phép từ file quy chế — nhưng mọi thay đổi đều qua thẻ xác nhận để con người bấm áp dụng.</div></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-strip"><span>Timesheets — Coverage &amp; Time-off</span><span>5</span></div>
+</div>
+
+<!-- ============ SLIDE 6 · BA CA BỐN KÍP ============ -->
+<div class="slide">
+  <div class="timing-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>6:00 – 7:15</div>
+  <div class="slide-content">
+    <div class="slide-kicker"><span class="kicker-app-chip">Timesheets</span> Slide 6 · Bài toán "ba ca bốn kíp" trong sản xuất</div>
+    <div class="slide-heading">Xoay ca nhà máy: <span class="heading-highlight">mẫu dựng sẵn theo luật lao động VN</span></div>
+    <div class="slide-body-grid">
+      <div class="talk-points">
+        <div class="talk-point"><div class="point-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-9-9"/><path d="M21 3v6h-6"/></svg></div><div><div class="point-title">Thư viện mẫu xoay ca Việt Nam</div><div class="point-desc">Sản xuất 3 ca, y tế 24h, bán lẻ 2 ca, F&amp;B split-shift, kho vận, công trường… Mẫu "VN Manufacturing 3-Shift": 3 ca sáng/chiều/đêm, 3 kíp xoay tuần trong chu kỳ 4 tuần.</div></div></div>
+        <div class="talk-point"><div class="point-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div><div class="point-title">Ràng buộc cứng bảo vệ người lao động</div><div class="point-desc">Tối thiểu 11h nghỉ sau ca đêm, tối đa 6 ngày liên tục, 1 ngày nghỉ/tuần — động cơ xếp ca không bao giờ vi phạm, kể cả khi tự động lấp chỗ trống.</div></div></div>
+        <div class="talk-point"><div class="point-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><div><div class="point-title">"Bốn kíp" = thêm một nhóm vào mẫu</div><div class="point-desc">Kíp là "nhóm" trong mẫu lịch — số nhóm không giới hạn. Dựng mô hình 3 ca 4 kíp chạy liên tục 24/7 bằng chính trình soạn mẫu, rồi áp cho từng xưởng.</div></div></div>
+      </div>
+      <div class="shot-stack">
+        <div class="shot-frame"><div class="shot-titlebar"><span class="shot-dot"></span><span class="shot-dot"></span><span class="shot-dot"></span><span class="shot-url">timesheets · Thư viện mẫu lịch hệ thống (8 mẫu VN)</span></div><img src="shots/timesheet-pattern-library.jpg" alt="Thư viện mẫu lịch làm việc"></div>
+        <div class="shot-frame shot-secondary"><div class="shot-titlebar"><span class="shot-dot"></span><span class="shot-dot"></span><span class="shot-dot"></span><span class="shot-url">timesheets · VN Manufacturing 3-Shift — Morning/Afternoon/Night × T2–T7</span></div><img src="shots/timesheet-3shift-template.jpg" alt="Chi tiết mẫu 3 ca"></div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-strip"><span>Timesheets — Shift patterns</span><span>6</span></div>
+</div>
+
+<!-- ============ SLIDE 7 · TRỢ LÝ CÔNG LƯƠNG 24/7 ============ -->
+<div class="slide">
+  <div class="timing-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>7:15 – 8:30</div>
+  <div class="slide-content">
+    <div class="slide-kicker"><span class="kicker-app-chip">Payrolls</span> Slide 7 · Trợ lý công lương 24/7</div>
+    <div class="slide-heading">"Vì sao lương tháng này của tôi thế này?" — <span class="heading-highlight">trả lời trong 5 giây, đúng từng đồng</span></div>
+    <div class="slide-body-grid grid-flip">
+      <div class="shot-stack">
+        <div class="shot-frame"><div class="shot-titlebar"><span class="shot-dot"></span><span class="shot-dot"></span><span class="shot-dot"></span><span class="shot-url">payrolls · AI Copilot ngay trong bảng lương — Explain a number, Scan for anomalies</span></div><img src="shots/payroll-ai-copilot.jpg" alt="AI Copilot trong bảng lương"></div>
+        <div class="shot-frame shot-secondary"><div class="shot-titlebar"><span class="shot-dot"></span><span class="shot-dot"></span><span class="shot-dot"></span><span class="shot-url">payrolls · Giải trình một con số — công thức + nguồn của từng biến</span></div><img src="shots/payroll-formula-explain.jpg" alt="Giải trình công thức Total Income"></div>
+      </div>
+      <div class="talk-points">
+        <div class="talk-point point-ai"><div class="point-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><div><div class="point-title">Chat có ngữ cảnh cá nhân</div><div class="point-desc">Copilot biết bạn là ai, kỳ lương nào, vị trí nào; các lệnh sẵn: giải thích một con số, quét bất thường, tóm tắt kỳ lương cho người duyệt.</div></div></div>
+        <div class="talk-point"><div class="point-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div><div><div class="point-title">Giải trình tất định — không bịa số</div><div class="point-desc">"Explain a number" phân tích đúng công thức thật (=salary+allowance+kpi_bonus+meal_allowance), truy từng biến về snapshot dữ liệu đã đóng băng của kỳ lương, đối chiếu khớp 100% rồi mới nhờ AI kể lại bằng lời.</div></div></div>
+        <div class="talk-point"><div class="point-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></div><div><div class="point-title">Phiếu lương tự phục vụ + xác nhận/khiếu nại</div><div class="point-desc">Nhân viên xem phiếu lương từng khoản, bấm Xác nhận hoặc Khiếu nại đúng dòng thắc mắc — HR hết trả lời tin nhắn lúc nửa đêm.</div></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-strip"><span>Payrolls — AI Copilot &amp; Payslip</span><span>7</span></div>
+</div>
+
+<!-- ============ SLIDE 8 · TÍNH LƯƠNG NHIỀU NGUỒN ============ -->
+<div class="slide">
+  <div class="timing-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>8:30 – 9:30</div>
+  <div class="slide-content">
+    <div class="slide-kicker"><span class="kicker-app-chip">Payrolls</span> Slide 8 · Tính lương từ nhiều nguồn dữ liệu</div>
+    <div class="slide-heading">Một kỳ lương = <span class="heading-highlight">HRIS + Bảng công + Tăng ca + Ca kíp</span>, đóng băng và tính trong 30 giây</div>
+    <div class="slide-body-grid">
+      <div class="talk-points">
+        <div class="talk-point"><div class="point-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.7 4 3 9 3s9-1.3 9-3V5"/><path d="M3 12c0 1.7 4 3 9 3s9-1.3 9-3"/></svg></div><div><div class="point-title">Kết nối nguồn, không nhập tay lại</div><div class="point-desc">Hồ sơ – hợp đồng – mã thuế từ HRIS; ngày công, phép từ Timesheets; giờ tăng ca, ca kíp từ Schedule; lương cơ bản lấy từ chiếc ghế trong Workforce. Mỗi biến công thức chỉ về đúng một nguồn.</div></div></div>
+        <div class="talk-point"><div class="point-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 17V9m5 8V5m5 12v-6m5 6V3"/></svg></div><div><div class="point-title">Động cơ công thức kiểu Excel, chạy theo DAG</div><div class="point-desc">100 cột công thức × 2.000 nhân viên tính dưới 30 giây; snapshot nguồn được đóng băng theo kỳ — chạy lại bao nhiêu lần vẫn ra đúng một kết quả.</div></div></div>
+        <div class="talk-point point-ai"><div class="point-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/></svg></div><div><div class="point-title">AI Review canh cổng trước khi duyệt</div><div class="point-desc">Quét bất thường tự động (lương lệch bất thường so kỳ trước, biến thiếu nguồn) — người duyệt nhìn "20 anomalies" là biết phải xem gì trước khi ký.</div></div></div>
+      </div>
+      <div class="shot-stack">
+        <div class="shot-frame"><div class="shot-titlebar"><span class="shot-dot"></span><span class="shot-dot"></span><span class="shot-dot"></span><span class="shot-url">payrolls · Kỳ lương Việt Nam — thuế, BHXH, cảnh báo AI Review, stepper duyệt</span></div><img src="shots/payroll-run-detail.jpg" alt="Chi tiết kỳ lương"></div>
+        <div class="shot-frame shot-secondary"><div class="shot-titlebar"><span class="shot-dot"></span><span class="shot-dot"></span><span class="shot-dot"></span><span class="shot-url">payrolls · Sources — biến bảng công nối từ Timesheets</span></div><img src="shots/payroll-sources-timesheets.jpg" alt="Trang nguồn dữ liệu"></div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-strip"><span>Payrolls — Multi-source calc engine</span><span>8</span></div>
+</div>
+
+<!-- ============ SLIDE 9 · HRIS COPILOT (bổ trợ) ============ -->
+<div class="slide">
+  <div class="timing-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>9:30 – 10:00</div>
+  <div class="slide-content">
+    <div class="slide-kicker"><span class="kicker-app-chip">HRIS</span> Slide 9 · Một trợ lý — cả vòng đời nhân sự</div>
+    <div class="slide-heading">AI ở mọi nơi, nhưng <span class="heading-highlight">con người luôn bấm nút cuối cùng</span></div>
+    <div class="slide-body-grid grid-flip">
+      <div class="shot-stack">
+        <div class="shot-frame"><div class="shot-titlebar"><span class="shot-dot"></span><span class="shot-dot"></span><span class="shot-dot"></span><span class="shot-url">hris · AI Assistant — headcount, hồ sơ, hợp đồng, chính sách, offboard</span></div><img src="shots/hris-ai-assistant.jpg" alt="HRIS AI Assistant"></div>
+      </div>
+      <div class="talk-points">
+        <div class="talk-point point-ai"><div class="point-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/></svg></div><div><div class="point-title">Cùng một trợ lý trong cả 5 ứng dụng</div><div class="point-desc">Đếm headcount, tra hợp đồng, tạo yêu cầu thay đổi hồ sơ, import nhân viên hàng loạt từ file — bằng hội thoại, hỗ trợ Claude / GPT / Gemini theo lựa chọn của doanh nghiệp.</div></div></div>
+        <div class="talk-point"><div class="point-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></div><div><div class="point-title">Kiến trúc an toàn: đọc thoải mái — ghi phải xác nhận</div><div class="point-desc">AI chỉ được "dàn dựng" thao tác ghi thành thẻ chờ; con người bấm xác nhận thì hệ thống mới thực thi, dưới đúng quyền và nhật ký của người đó. AI không có quyền ghi trực tiếp vào dữ liệu.</div></div></div>
+        <div class="talk-point"><div class="point-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><div><div class="point-title">Dữ liệu ở lại trong tenant</div><div class="point-desc">API key AI cấu hình theo từng doanh nghiệp, mã hoá khi lưu; bật là copilot sáng khắp nơi, gỡ key là tắt toàn bộ.</div></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-strip"><span>HRIS — AI Assistant</span><span>9</span></div>
+</div>
+
+<!-- ============ SLIDE 10 · KẾT ============ -->
+<div class="slide">
+  <div class="timing-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>10:00 · Q&amp;A</div>
+  <div class="slide-content">
+    <div class="slide-kicker">Tóm tắt</div>
+    <div class="slide-heading">Hành trình nhân sự — <span class="heading-highlight">mỗi chặng một sản phẩm, một AI đồng hành</span></div>
+    <div class="closing-grid">
+      <div class="recap-list">
+        <div class="recap-item"><span class="recap-num">1</span>Sơ đồ tổ chức theo "ghế" — sẵn sàng cho nhân sự AI có JD như người</div>
+        <div class="recap-item"><span class="recap-num">2</span>Career track dạng đồ thị — AI dựng track, chỉ đường thăng tiến</div>
+        <div class="recap-item"><span class="recap-num">3</span>Đề xuất thăng chức AI soạn nháp — người duyệt theo chính sách, có SLA</div>
+        <div class="recap-item"><span class="recap-num">4</span>Phủ ca &amp; nghỉ phép — thấy lỗ hổng quân số trước khi duyệt đơn</div>
+        <div class="recap-item"><span class="recap-num">5</span>Ba ca bốn kíp — mẫu xoay ca chuẩn VN, ràng buộc nghỉ ngơi cứng</div>
+        <div class="recap-item"><span class="recap-num">6</span>Lương đa nguồn, snapshot đóng băng — AI giải trình đúng từng đồng, 24/7</div>
+      </div>
+      <div class="safety-card">
+        <div class="safety-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Nguyên tắc AI của cả bộ sản phẩm</div>
+        <div class="safety-rule"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg><span><b>Đọc tự do, ghi phải xác nhận.</b> Mọi thao tác ghi của AI dừng ở thẻ chờ — con người bấm áp dụng, hệ thống thực thi dưới quyền của chính người đó.</span></div>
+        <div class="safety-rule"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg><span><b>Số liệu tất định trước, ngôn ngữ sau.</b> Giải trình lương truy về snapshot đã đóng băng; AI chỉ kể lại, không tự tính.</span></div>
+        <div class="safety-rule"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg><span><b>Chọn model theo doanh nghiệp.</b> Claude / GPT / Gemini — key riêng từng tenant, mã hoá, tháo là tắt.</span></div>
+        <div class="safety-rule" style="border-top:1px dashed #c7d2fe;padding-top:12px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/></svg><span><b>Bước tiếp theo:</b> loại vị trí "AI agent" trong Workforce — nhân sự AI đứng trong sơ đồ tổ chức, nhận việc, đo KPI như một thành viên thật.</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-strip"><span>Rework HRM Suite — Cảm ơn!</span><span>10</span></div>
+</div>
+
+</div><!-- /.slide-deck -->
+
+<div class="nav-controls">
+  <button class="nav-btn" onclick="prevSlide()" aria-label="Slide trước">←</button>
+  <span class="slide-counter"><span id="current">1</span> / <span id="total">10</span></span>
+  <button class="nav-btn" onclick="nextSlide()" aria-label="Slide sau">→</button>
+</div>
+
+<div class="shot-lightbox" id="shotLightbox"><img id="lightboxImg" src="" alt=""></div>
+
+<script>
+let current = 1;
+const total = document.querySelectorAll('.slide').length;
+document.getElementById('total').textContent = total;
+function showSlide(n){
+  if(n<1)n=1; if(n>total)n=total; current=n;
+  document.querySelectorAll('.slide').forEach((s,i)=>s.classList.toggle('active',i===n-1));
+  document.getElementById('current').textContent=n;
+  document.getElementById('progressBar').style.width=(n/total*100)+'%';
+}
+function nextSlide(){showSlide(current+1)}
+function prevSlide(){showSlide(current-1)}
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();nextSlide()}
+  if(e.key==='ArrowLeft'){e.preventDefault();prevSlide()}
+  if(e.key==='Escape'){closeLightbox()}
+});
+const lb=document.getElementById('shotLightbox'),lbImg=document.getElementById('lightboxImg');
+document.querySelectorAll('.shot-frame img').forEach(img=>{
+  img.closest('.shot-frame').addEventListener('click',e=>{
+    e.stopPropagation(); lbImg.src=img.src; lb.classList.add('open');
+  });
+});
+function closeLightbox(){lb.classList.remove('open')}
+lb.addEventListener('click',closeLightbox);
+document.addEventListener('click',e=>{
+  if(e.target.closest('.nav-controls')||e.target.closest('.shot-frame')||lb.classList.contains('open'))return;
+  nextSlide();
+});
+showSlide(1);
+</script>
+</body>
+</html>
