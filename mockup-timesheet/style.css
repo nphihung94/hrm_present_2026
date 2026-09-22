@@ -1,0 +1,2023 @@
+/* ==========================================================================
+   Base Timesheet - Design System & Styles
+   Matching Base.vn Enterprise SaaS Aesthetic
+   ========================================================================== */
+
+:root {
+  /* Brand & Theme Colors */
+  --primary-blue: #1d4ed8;
+  --primary-blue-hover: #1e40af;
+  --base-brand-blue: #0b57d0;
+  --accent-cyan: #06b6d4;
+  --accent-cyan-light: #cffafe;
+  --success-green: #059669;
+  --success-green-hover: #047857;
+  --danger-red: #ef4444;
+  --warning-orange: #f59e0b;
+  --purple-send: #6366f1;
+  --purple-send-hover: #4f46e5;
+
+  /* Neutrals & Slate */
+  --bg-page: #e8edf5;
+  --bg-window: #ffffff;
+  --bg-subtle: #f8fafc;
+  --bg-slot: #f1f5f9;
+  --bg-slot-hover: #e2e8f0;
+  
+  --border-light: #e2e8f0;
+  --border-subtle: #edf2f7;
+  --border-dark: #cbd5e1;
+
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+  --text-dim: #94a3b8;
+  --text-white: #ffffff;
+
+  /* Typography */
+  --font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* Shadows */
+  --shadow-window: 0 20px 50px -10px rgba(15, 23, 42, 0.18), 0 0 0 1px rgba(226, 232, 240, 0.8);
+  --shadow-card: 0 24px 60px -12px rgba(15, 23, 42, 0.22), 0 0 0 1px rgba(226, 232, 240, 0.9);
+  --shadow-glow: 0 0 0 7px #dbeafe, 0 0 0 15px #eff6ff, 0 12px 30px rgba(37, 99, 235, 0.28);
+}
+
+/* Reset & Basics */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--bg-page);
+  background-image: radial-gradient(at 0% 0%, #dbeafe 0, transparent 50%), radial-gradient(at 100% 100%, #e0e7ff 0, transparent 50%);
+  color: var(--text-main);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+  overflow-x: hidden;
+}
+
+.app-viewport {
+  width: 100%;
+  max-width: 1320px;
+  margin: 0 auto;
+  position: relative;
+}
+
+/* ==========================================================================
+   Main Window Container
+   ========================================================================== */
+.timesheet-window {
+  background: var(--bg-window);
+  border-radius: 20px;
+  box-shadow: var(--shadow-window);
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(226, 232, 240, 0.95);
+  display: flex;
+  flex-direction: row;
+  height: 88vh;
+  min-height: 720px;
+  max-height: 960px;
+}
+
+.timesheet-main-layout {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  overflow-y: auto;
+}
+
+/* ==========================================================================
+   Top Navigation
+   ========================================================================== */
+.top-nav {
+  height: 64px;
+  padding: 0 24px;
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #ffffff;
+  position: relative;
+  z-index: 5;
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.app-logo {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9px;
+  overflow: hidden;
+  box-shadow: 0 3px 10px rgba(6, 182, 212, 0.25);
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.app-logo:hover {
+  transform: scale(1.05);
+}
+
+.app-logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.app-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1e293b;
+  letter-spacing: -0.3px;
+}
+
+.nav-center {
+  flex: 1;
+  max-width: 440px;
+  margin: 0 24px;
+}
+
+.search-command-bar {
+  display: flex;
+  align-items: center;
+  background: #f1f5f9;
+  border-radius: 9999px;
+  padding: 8px 16px;
+  gap: 10px;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.search-command-bar:focus-within {
+  background: #ffffff;
+  border-color: #93c5fd;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.search-icon {
+  width: 16px;
+  height: 16px;
+  color: #94a3b8;
+  flex-shrink: 0;
+}
+
+.search-command-bar input {
+  border: none;
+  background: transparent;
+  width: 100%;
+  font-family: inherit;
+  font-size: 13.5px;
+  color: var(--text-main);
+  outline: none;
+}
+
+.search-command-bar input::placeholder {
+  color: #94a3b8;
+}
+
+.search-kbd {
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  color: #94a3b8;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 5px;
+  padding: 2px 6px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.top-nav-profile-badge {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #1d4ed8;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(29, 78, 216, 0.3);
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ==========================================================================
+   Subheader (All Schedules / September 2026 / Controls)
+   ========================================================================== */
+.schedule-subheader {
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-subtle);
+  background: #ffffff;
+}
+
+.sub-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.schedule-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.dot-separator {
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+.schedule-date-selector {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #475569;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 6px;
+  transition: background 0.15s;
+}
+
+.schedule-date-selector:hover {
+  background: #f1f5f9;
+}
+
+.chevron-icon {
+  width: 12px;
+  height: 12px;
+  color: #64748b;
+}
+
+.schedule-counter-badge {
+  font-size: 12px;
+  font-weight: 500;
+  color: #64748b;
+  background: #f8fafc;
+  border: 1px solid var(--border-light);
+  padding: 3px 9px;
+  border-radius: 6px;
+}
+
+.sub-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.view-mode-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #475569;
+  border: 1px solid var(--border-light);
+  background: #ffffff;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.view-mode-pill:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.btn-filter {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #475569;
+  background: #ffffff;
+  border: 1px solid var(--border-light);
+  padding: 6px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-filter:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.filter-icon {
+  width: 13px;
+  height: 13px;
+  color: #64748b;
+}
+
+.btn-new-shift {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #ffffff;
+  background: var(--success-green);
+  border: none;
+  padding: 7px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(5, 150, 105, 0.25);
+  transition: all 0.15s ease;
+}
+
+.btn-new-shift:hover {
+  background: var(--success-green-hover);
+  transform: translateY(-1px);
+}
+
+.btn-new-shift .plus-sign {
+  font-size: 15px;
+  line-height: 1;
+}
+
+/* ==========================================================================
+   Status Summary Bar (KPIs)
+   ========================================================================== */
+.status-summary-bar {
+  padding: 10px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-subtle);
+  background: #fafbfc;
+  font-size: 12.5px;
+}
+
+.status-items-left,
+.status-items-right {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.status-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-muted);
+}
+
+.status-item strong {
+  color: #334155;
+}
+
+.status-icon {
+  color: #94a3b8;
+  font-size: 13px;
+}
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.dot-red {
+  background-color: var(--danger-red);
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
+}
+
+.dot-orange {
+  background-color: var(--warning-orange);
+  box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2);
+}
+
+/* ==========================================================================
+   Timesheet Table View
+   ========================================================================== */
+.timesheet-content {
+  flex: 1;
+  position: relative;
+  background: #ffffff;
+  overflow-x: auto;
+}
+
+.grid-table-container {
+  width: 100%;
+}
+
+.timesheet-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.timesheet-table th {
+  padding: 12px 16px;
+  font-weight: 600;
+  border-bottom: 1px solid var(--border-light);
+  background: #fbfcfd;
+}
+
+.col-employee {
+  width: 250px;
+  min-width: 230px;
+  font-size: 12.5px;
+  color: #64748b;
+  padding-left: 24px !important;
+}
+
+.col-day {
+  text-align: center;
+  width: calc((100% - 250px) / 6);
+  min-width: 90px;
+  border-left: 1px solid #f1f5f9;
+}
+
+.day-name {
+  font-size: 11px;
+  font-weight: 700;
+  color: #64748b;
+  letter-spacing: 0.5px;
+}
+
+.day-date {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-top: 1px;
+}
+
+.col-day.day-today .day-name {
+  color: #059669;
+  position: relative;
+  display: inline-block;
+  font-weight: 800;
+}
+
+.col-day.day-today .day-name::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  right: 0;
+  height: 2.5px;
+  background: #059669;
+  border-radius: 2px;
+}
+
+.col-day.day-today .day-date {
+  color: #0f172a;
+}
+
+/* Table Body Rows */
+.timesheet-table tbody tr {
+  border-bottom: 1px solid #f1f5f9;
+  transition: background-color 0.15s ease;
+}
+
+.timesheet-table tbody tr:hover {
+  background-color: #fafbfc;
+}
+
+.cell-employee {
+  padding: 10px 16px 10px 24px;
+}
+
+.emp-profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.emp-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  color: #ffffff;
+  font-size: 11.5px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  letter-spacing: 0.2px;
+}
+
+/* Employee Avatar Colors */
+.avatar-os { background: #f97316; }
+.avatar-ep { background: #1d4ed8; }
+.avatar-ph { background: #0d9488; }
+.avatar-mq { background: #d97706; }
+.avatar-bt { background: #0284c7; }
+.avatar-hm { background: #9333ea; }
+.avatar-dd { background: #16a34a; }
+
+.emp-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.emp-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1e293b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.emp-sub {
+  font-size: 11.5px;
+  color: #94a3b8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 1px;
+}
+
+.emp-hours {
+  font-size: 11.5px;
+  font-weight: 500;
+  color: #64748b;
+  background: #f1f5f9;
+  padding: 2px 7px;
+  border-radius: 6px;
+  margin-left: auto;
+}
+
+.cell-slot {
+  padding: 8px 10px;
+  border-left: 1px solid #f1f5f9;
+  vertical-align: middle;
+}
+
+.slot-placeholder {
+  width: 100%;
+  height: 32px;
+  background-color: var(--bg-slot);
+  border-radius: 8px;
+  border: 1px dashed rgba(203, 213, 225, 0.6);
+  transition: all 0.2s ease;
+}
+
+.timesheet-table tbody tr:hover .slot-placeholder {
+  background-color: var(--bg-slot-hover);
+  border-color: #cbd5e1;
+}
+
+/* ==========================================================================
+   Copilot Agent Side Panel (Chiếm Full Màn Hình Bên Phải)
+   ========================================================================== */
+.copilot-panel {
+  width: 440px;
+  flex-shrink: 0;
+  height: 100%;
+  background: #ffffff;
+  border-left: 1px solid var(--border-light);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 50;
+  box-shadow: -6px 0 25px rgba(15, 23, 42, 0.04);
+}
+
+.copilot-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.copilot-header {
+  height: 64px;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-subtle);
+  background: #ffffff;
+  flex-shrink: 0;
+}
+
+.copilot-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.copilot-icon-badge {
+  width: 32px;
+  height: 32px;
+  background: #6366f1;
+  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  box-shadow: 0 3px 8px rgba(99, 102, 241, 0.3);
+}
+
+.sparkle-svg {
+  width: 18px;
+  height: 18px;
+}
+
+.copilot-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1e293b;
+  letter-spacing: -0.3px;
+}
+
+/* Chat Messages Container */
+.copilot-messages {
+  flex: 1;
+  padding: 24px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background: #ffffff;
+  overflow-y: auto;
+}
+
+.message-row {
+  display: flex;
+  width: 100%;
+}
+
+.user-message-row {
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto;
+}
+
+/* Purple User Message Bubble (Chuẩn theo hình ảnh) */
+.chat-bubble.purple-bubble {
+  width: 100%;
+  background: #632bd6;
+  background: linear-gradient(145deg, #6d28d9 0%, #5b21b6 100%);
+  color: #ffffff;
+  padding: 16px 20px;
+  border-radius: 14px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.55;
+  letter-spacing: -0.1px;
+  box-shadow: 0 4px 16px rgba(109, 40, 217, 0.22);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.chat-bubble.purple-bubble:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(109, 40, 217, 0.3);
+}
+
+/* AI Status Card: Reviewing the timesheet */
+.ai-status-card {
+  width: 100%;
+  background: #ffffff;
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  padding: 13px 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04);
+  animation: fadeInStatus 0.4s ease forwards;
+}
+
+@keyframes fadeInStatus {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ai-status-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.status-spinner {
+  width: 17px;
+  height: 17px;
+  color: #64748b;
+  animation: spinSlow 3s linear infinite;
+}
+
+@keyframes spinSlow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.ai-status-text {
+  font-size: 13.5px;
+  font-weight: 500;
+  color: #475569;
+}
+
+/* ==========================================================================
+   Step 2: AI Service Execution Box (Hiệu ứng phóng to đoạn dưới lên)
+   ========================================================================== */
+.ai-service-calling-card {
+  width: 100%;
+  background: #ffffff;
+  border: 1.5px solid #e0e7ff;
+  border-radius: 16px;
+  box-shadow: 0 14px 36px -6px rgba(99, 102, 241, 0.15), 0 4px 12px rgba(15, 23, 42, 0.04);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transform-origin: bottom center;
+  animation: zoomInUp 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes zoomInUp {
+  0% {
+    opacity: 0;
+    transform: scale(0.85) translateY(36px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.service-calling-header {
+  padding: 12px 18px;
+  background: #f8fafc;
+  border-bottom: 1px solid #edf2f7;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.service-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #ede9fe;
+  color: #6d28d9;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: -0.1px;
+}
+
+.radar-pulse {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #7c3aed;
+  box-shadow: 0 0 0 0 rgba(124, 58, 237, 0.7);
+  animation: radarWave 1.6s infinite cubic-bezier(0.66, 0, 0, 1);
+}
+
+@keyframes radarWave {
+  to {
+    box-shadow: 0 0 0 9px rgba(124, 58, 237, 0);
+  }
+}
+
+.service-status-live {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #6366f1;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Sequential Tasks List */
+.service-tasks-list {
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: #ffffff;
+}
+
+.task-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 9px;
+  background: #fbfcfd;
+  border: 1px solid #f1f5f9;
+  font-size: 12.5px;
+  color: #475569;
+  opacity: 0;
+  transform: translateY(12px) scale(0.96);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Task Item Active/Complete States */
+.task-item.active {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  background: #f5f3ff;
+  border-color: #ddd6fe;
+  color: #1e1b4b;
+}
+
+.task-item.completed {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  background: #ffffff;
+  border-color: #f1f5f9;
+}
+
+.task-item.completed:hover {
+  background: #f8fafc;
+}
+
+.task-icon-wrap {
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.task-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid #ddd6fe;
+  border-top-color: #7c3aed;
+  border-radius: 50%;
+  animation: spinSlow 0.8s linear infinite;
+  display: inline-block;
+}
+
+.task-check {
+  display: none;
+  font-size: 12px;
+  font-weight: 800;
+  color: #059669;
+}
+
+/* State switches */
+.task-item.completed .task-spinner {
+  display: none;
+}
+
+.task-item.completed .task-check {
+  display: inline-block;
+  color: #16a34a;
+}
+
+.task-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  line-height: 1.4;
+}
+
+.task-highlight {
+  background: #e0e7ff;
+  color: #3730a3;
+  padding: 1px 7px;
+  border-radius: 5px;
+  font-weight: 700;
+  font-size: 11.5px;
+}
+
+.alert-highlight {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+/* ==========================================================================
+   Step 3: Copilot Proposal Banner (Trên bảng Timesheet)
+   ========================================================================== */
+.copilot-proposal-banner {
+  margin: 12px 24px 6px 24px;
+  padding: 10px 18px;
+  background: #eff6ff;
+  border: 1.5px solid #bfdbfe;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  animation: fadeInBanner 0.4s ease forwards;
+}
+
+@keyframes fadeInBanner {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.proposal-banner-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: #1e40af;
+}
+
+.sparkle-proposal {
+  color: #2563eb;
+  font-size: 15px;
+}
+
+.proposal-banner-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-confirm-schedule {
+  background: #1d4ed8;
+  color: #ffffff;
+  border: none;
+  padding: 7px 16px;
+  border-radius: 8px;
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(29, 78, 216, 0.3);
+  transition: all 0.15s ease;
+}
+
+.btn-confirm-schedule:hover {
+  background: #1e40af;
+  transform: translateY(-1px);
+}
+
+.btn-adjust-schedule {
+  background: #ffffff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+  padding: 7px 14px;
+  border-radius: 8px;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-adjust-schedule:hover {
+  background: #f8fafc;
+}
+
+/* Step 4: Published Success Green Banner (Chuẩn theo ảnh) */
+.copilot-published-banner {
+  margin: 12px 24px 6px 24px;
+  padding: 10px 18px;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 8px;
+  display: none;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #15803d;
+  animation: fadeInBanner 0.4s ease forwards;
+}
+
+.check-published-icon {
+  color: #16a34a;
+  font-size: 14px;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.published-banner-text strong {
+  color: #15803d;
+  font-weight: 700;
+}
+
+/* Step 5: Alert Banner for Leave & Coverage Gap */
+.copilot-alert-banner {
+  margin: 12px 24px 6px 24px;
+  padding: 10px 18px;
+  background: #fff1f2;
+  border: 1px solid #fecdd3;
+  border-radius: 8px;
+  display: none;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #e11d48;
+  animation: fadeInBanner 0.4s ease forwards;
+}
+
+.alert-banner-icon {
+  color: #e11d48;
+  font-size: 15px;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.alert-banner-text strong {
+  color: #be123c;
+  font-weight: 700;
+}
+
+/* Step 6: Resolved Success Green Banner */
+.copilot-resolved-banner {
+  margin: 12px 24px 6px 24px;
+  padding: 10px 18px;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 8px;
+  display: none;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #15803d;
+  animation: fadeInBanner 0.4s ease forwards;
+}
+
+.resolved-banner-text strong {
+  color: #15803d;
+  font-weight: 700;
+}
+
+/* Open Shift Needed Chip (Bước 5) */
+.open-shift-needed-chip {
+  display: none;
+  border: 1.5px dashed #f87171;
+  background: #fef2f2;
+  color: #dc2626;
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 5px 6px;
+  border-radius: 6px;
+  text-align: center;
+  white-space: nowrap;
+  letter-spacing: -0.2px;
+  animation: pulseNeeded 2s infinite ease-in-out;
+}
+
+@keyframes pulseNeeded {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.2); }
+  50% { box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.15); }
+}
+
+.chip-leave {
+  display: none;
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+/* Background Shift Chips in Grid Table */
+.shift-chip {
+  padding: 5px 6px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  text-align: center;
+  white-space: nowrap;
+  letter-spacing: -0.2px;
+}
+
+.chip-blue {
+  background: #2563eb;
+  color: #ffffff;
+}
+
+.chip-green {
+  background: #059669;
+  color: #ffffff;
+}
+
+.chip-teal {
+  background: #0f766e;
+  color: #ffffff;
+}
+
+.chip-purple {
+  background: #7c3aed;
+  color: #ffffff;
+}
+
+.chip-gray {
+  background: #f1f5f9;
+  color: #64748b;
+  font-weight: 600;
+}
+
+/* Slot chips hidden state in Step 1/2 */
+.cell-slot.hide-chips .shift-chip {
+  background: var(--bg-slot);
+  color: transparent;
+  border: 1px dashed rgba(203, 213, 225, 0.6);
+  box-shadow: none;
+  user-select: none;
+}
+
+/* ==========================================================================
+   POPUP PHÓNG TO PHẦN THỜI GIAN (Hero of Step 3)
+   ========================================================================== */
+.zoom-schedule-popup {
+  position: absolute;
+  top: 45px;
+  left: 55px;
+  width: 530px;
+  background: #ffffff;
+  border: 3px solid #22d3ee;
+  border-radius: 22px;
+  box-shadow: 0 0 0 6px rgba(34, 211, 238, 0.25), 0 25px 65px -10px rgba(15, 23, 42, 0.4);
+  z-index: 80;
+  animation: popupZoomIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  overflow: hidden;
+}
+
+@keyframes popupZoomIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.82) translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.zoom-popup-content {
+  padding: 18px 20px;
+  background: #ffffff;
+}
+
+.zoom-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 10px 10px;
+}
+
+.zoom-cell-hours {
+  width: 44px;
+  vertical-align: middle;
+}
+
+.zoom-hours-badge {
+  font-size: 13px;
+  font-weight: 600;
+  color: #475569;
+}
+
+.zoom-chip {
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  letter-spacing: -0.2px;
+}
+
+/* ==========================================================================
+   Copilot Header Profile & Proposal Message in Chat
+   ========================================================================== */
+.top-profile-badge {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #1d4ed8;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(29, 78, 216, 0.3);
+}
+
+.user-avatar-badge-ql {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #1d4ed8;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(29, 78, 216, 0.3);
+  margin-left: 10px;
+}
+
+.chat-bubble.blue-bubble {
+  background: #1d4ed8;
+  color: #ffffff;
+  padding: 12px 20px;
+  border-radius: 20px;
+  font-size: 14.5px;
+  font-weight: 600;
+  box-shadow: 0 3px 10px rgba(29, 78, 216, 0.25);
+  display: inline-block;
+  max-width: 82%;
+  text-align: right;
+}
+
+.service-context-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.ai-mini-icon {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  background: #6366f1;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+
+.service-calling-footer {
+  padding: 10px 14px;
+  background: #f8fafc;
+  border-top: 1px solid #f1f5f9;
+  text-align: center;
+}
+
+.service-pill-outline {
+  display: inline-block;
+  background: #f5f3ff;
+  border: 1px solid #ddd6fe;
+  color: #7c3aed;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  letter-spacing: 0.5px;
+}
+
+/* AI Proposal Final Bubble */
+.ai-proposal-message-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 4px;
+  animation: fadeInProposal 0.4s ease forwards;
+}
+
+@keyframes fadeInProposal {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.ai-avatar-square {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: #6366f1;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  box-shadow: 0 2px 6px rgba(99, 102, 241, 0.3);
+  flex-shrink: 0;
+}
+
+.ai-proposal-bubble {
+  background: #ffffff;
+  border: 1px solid var(--border-light);
+  border-radius: 14px;
+  padding: 14px 18px;
+  font-size: 13.5px;
+  color: #334155;
+  line-height: 1.5;
+  box-shadow: 0 3px 10px rgba(15, 23, 42, 0.05);
+}
+
+/* ==========================================================================
+   Step 4: Zoom to phần "Confirm, xếp lịch" & Confirmation Flow
+   ========================================================================== */
+.confirm-btn-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.zoom-confirm-callout {
+  position: absolute;
+  top: -16px;
+  right: -15px;
+  background: #ffffff;
+  border: 3px solid #06b6d4;
+  border-radius: 18px;
+  padding: 12px 16px;
+  box-shadow: 0 0 0 6px rgba(6, 182, 212, 0.25), 0 20px 50px rgba(15, 23, 42, 0.35);
+  z-index: 95;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  transform-origin: top right;
+  animation: confirmCalloutZoom 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes confirmCalloutZoom {
+  0% {
+    opacity: 0;
+    transform: scale(0.85) translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1.12) translateY(0);
+  }
+}
+
+.zoom-confirm-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #1d4ed8;
+  color: #ffffff;
+  padding: 8px 18px;
+  border-radius: 10px;
+  font-weight: 800;
+  font-size: 14px;
+  letter-spacing: -0.1px;
+  box-shadow: 0 4px 16px rgba(29, 78, 216, 0.4);
+}
+
+.zoom-click-cursor {
+  font-size: 18px;
+  display: inline-block;
+  animation: cursorTap 1.2s infinite ease-in-out;
+}
+
+@keyframes cursorTap {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.25) translate(-2px, -2px); }
+}
+
+.zoom-confirm-tip {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #0369a1;
+  white-space: nowrap;
+}
+
+/* Step 4 Chat Flow (Chuẩn theo ảnh mới) */
+.step4-chat-flow {
+  display: none;
+  flex-direction: column;
+  gap: 12px;
+  animation: fadeInProposal 0.45s ease forwards;
+}
+
+.confirm-pill-bubble {
+  background: #93b4fd;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 14.5px;
+  padding: 8px 22px;
+  border-radius: 9999px;
+  display: inline-block;
+  text-align: right;
+  letter-spacing: -0.1px;
+  box-shadow: 0 2px 8px rgba(147, 180, 253, 0.35);
+}
+
+.user-avatar-badge-ql-light {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #1d4ed8;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(29, 78, 216, 0.3);
+  margin-left: 8px;
+}
+
+.final-published-bubble {
+  background: #ffffff;
+  border: 1px solid var(--border-light);
+  border-radius: 14px;
+  padding: 12px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #334155;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+}
+
+.final-published-bubble p {
+  color: #475569;
+}
+
+/* Faded context card & prompt bubble in Step 4 */
+.ai-service-calling-card.faded {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  opacity: 0.95;
+}
+
+.ai-service-calling-card.faded .service-calling-header {
+  display: none;
+}
+
+.ai-service-calling-card.faded .service-tasks-list {
+  padding: 4px 0 10px 0;
+  gap: 7px;
+}
+
+.ai-service-calling-card.faded .task-item {
+  background: transparent;
+  border: none;
+  padding: 2px 0;
+  font-size: 13.5px;
+  color: #64748b;
+}
+
+.ai-service-calling-card.faded .task-item strong {
+  color: #475569;
+}
+
+.ai-service-calling-card.faded .task-check {
+  color: #16a34a;
+  font-weight: 800;
+  font-size: 14px;
+}
+
+.ai-service-calling-card.faded .service-calling-footer {
+  background: transparent;
+  border: none;
+  padding: 6px 0;
+  text-align: left;
+}
+
+.ai-service-calling-card.faded .service-pill-outline {
+  background: #faf5ff;
+  border: 1px solid #e9d5ff;
+  color: #a855f7;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 4px 14px;
+  border-radius: 9999px;
+  letter-spacing: 0.3px;
+}
+
+/* Golden Lock on Shift Chips when Published in Step 4 */
+.shift-chip.locked::after {
+  content: ' 🔒';
+  font-size: 8.5px;
+  opacity: 0.88;
+  margin-left: 4px;
+}
+
+.copilot-input-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  background: #ffffff;
+  border: 1.5px solid var(--border-light);
+  border-radius: 9999px;
+  padding: 6px 8px 6px 18px;
+  transition: all 0.2s ease;
+}
+
+.copilot-input-container:focus-within {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+.copilot-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: 13.5px;
+  color: var(--text-main);
+  outline: none;
+}
+
+.copilot-input::placeholder {
+  color: #94a3b8;
+}
+
+.copilot-send-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--purple-send);
+  border: none;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.copilot-send-btn:hover {
+  background: var(--purple-send-hover);
+  transform: scale(1.05);
+}
+
+.send-icon {
+  width: 15px;
+  height: 15px;
+  transform: rotate(45deg) translate(-1px, 1px);
+}
+
+/* ==========================================================================
+   Step Guide Tag Pill (DƯỚI CÙNG Ở GIỮA, KHÔNG NẰM TRONG MÀN CHAT AI)
+   ========================================================================== */
+.step-guide-tag-centered {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #0f172a;
+  color: #ffffff;
+  padding: 10px 24px 10px 14px;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.1);
+  z-index: 150;
+  user-select: none;
+  animation: floatBadgeCenter 3s ease-in-out infinite;
+  backdrop-filter: blur(8px);
+}
+
+@keyframes floatBadgeCenter {
+  0%, 100% {
+    transform: translate(-50%, 0px);
+  }
+  50% {
+    transform: translate(-50%, -4px);
+  }
+}
+
+.step-guide-tag-centered .step-badge-number {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #06b6d4;
+  color: #082f49;
+  font-size: 14px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.step-guide-tag-centered .step-badge-text {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.1px;
+  white-space: nowrap;
+}
+
+.step-nav-arrow,
+.step-nav-btn {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 15px;
+  cursor: pointer;
+  padding: 3px 6px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+  line-height: 1;
+}
+
+.step-nav-arrow:hover,
+.step-nav-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.15);
+  transform: scale(1.12);
+}
+
+.step-nav-arrow:active,
+.step-nav-btn:active {
+  transform: scale(0.95);
+}
+
+.step-play-pause-btn {
+  font-size: 12px;
+  color: #22d3ee;
+}
+
+.step-play-pause-btn:hover {
+  color: #67e8f9;
+}
+
+.step-progress-bar {
+  position: absolute;
+  bottom: 0;
+  left: 20px;
+  right: 20px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.step-progress-bar::after {
+  content: '';
+  display: block;
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #22d3ee, #60a5fa);
+  border-radius: 2px;
+}
+
+.step-progress-bar.running::after {
+  animation: stepProgressFill var(--step-duration, 4s) linear forwards;
+}
+
+@keyframes stepProgressFill {
+  from { width: 0%; }
+  to { width: 100%; }
+}
+
+/* ==========================================================================
+   Step 5: Issue Alert Flow & Cyan Glowing Copilot Window
+   ========================================================================== */
+.copilot-card.step5-glow {
+  border: 3.5px solid #22d3ee !important;
+  border-radius: 20px !important;
+  box-shadow: 0 0 0 6px rgba(34, 211, 238, 0.28), 0 25px 65px rgba(15, 23, 42, 0.25) !important;
+  animation: step5GlowPulse 2.5s infinite ease-in-out;
+  transform: scale(1.02);
+  transform-origin: center right;
+  z-index: 100;
+}
+
+@keyframes step5GlowPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 6px rgba(34, 211, 238, 0.28), 0 25px 65px rgba(15, 23, 42, 0.25);
+  }
+  50% {
+    box-shadow: 0 0 0 9px rgba(34, 211, 238, 0.42), 0 30px 75px rgba(6, 182, 212, 0.3);
+  }
+}
+
+.step5-issue-flow {
+  display: none;
+  flex-direction: column;
+  gap: 16px;
+  animation: fadeInProposal 0.45s ease forwards;
+  margin-top: 8px;
+}
+
+.step5-alert-card {
+  background: #ffffff;
+  border: 2px solid #c7d2fe;
+  border-radius: 18px;
+  padding: 20px 22px;
+  box-shadow: 0 4px 18px rgba(99, 102, 241, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.step5-alert-body {
+  font-size: 15px;
+  font-weight: 600;
+  color: #334155;
+  line-height: 1.55;
+  letter-spacing: -0.1px;
+}
+
+.step5-highlight-red {
+  color: #ef4444;
+  font-weight: 800;
+  font-size: 15.5px;
+}
+
+.step5-service-footer {
+  display: flex;
+  align-items: center;
+}
+
+.coverage-pill {
+  background: #faf5ff !important;
+  border: 1.5px solid #e9d5ff !important;
+  color: #9333ea !important;
+  font-size: 11.5px !important;
+  font-weight: 800 !important;
+  padding: 6px 16px !important;
+  border-radius: 9999px !important;
+  letter-spacing: 0.4px !important;
+}
+
+.status-item.critical-item.has-critical .dot-red {
+  background: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.35);
+  animation: criticalPulse 1.5s infinite;
+}
+
+.status-item.critical-item.has-critical strong {
+  color: #ef4444;
+}
+
+@keyframes criticalPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.35); }
+}
+
+/* Step 5 AI Suggestion Bubble */
+.step5-ai-suggestion {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  animation: fadeInProposal 0.45s ease forwards;
+}
+
+.step5-suggestion-bubble {
+  background: #ffffff;
+  border: 1.5px solid #e0e7ff;
+  border-radius: 16px;
+  padding: 16px 18px;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.step5-suggestion-bubble p {
+  font-size: 14px;
+  font-weight: 500;
+  color: #334155;
+  line-height: 1.55;
+}
+
+.step5-suggestion-bubble strong {
+  color: #1e40af;
+  font-weight: 700;
+}
+
+.step5-action-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 2px;
+}
+
+.btn-choose-replacement {
+  background: #4f46e5;
+  color: #ffffff;
+  border: none;
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 700;
+  padding: 7px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.3);
+  transition: all 0.15s ease;
+}
+
+.btn-choose-replacement:hover {
+  background: #4338ca;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4);
+}
+
+.btn-cancel-replacement {
+  background: #f8fafc;
+  color: #64748b;
+  border: 1px solid #e2e8f0;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-cancel-replacement:hover {
+  background: #f1f5f9;
+  color: #334155;
+}
+
+/* Step 6: Resolved Chat Flow & Replacement Confirmation */
+.step6-chat-flow {
+  display: none;
+  flex-direction: column;
+  gap: 12px;
+  animation: fadeInProposal 0.45s ease forwards;
+  margin-top: 6px;
+}
+
+.choose-duke-user-bubble {
+  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.35) !important;
+  font-weight: 700 !important;
+}
+
+.step6-success-bubble {
+  border-color: #86efac !important;
+  background: #f0fdf4 !important;
+  color: #166534 !important;
+  box-shadow: 0 3px 12px rgba(34, 197, 94, 0.08) !important;
+}
+
+.step6-success-bubble p {
+  color: #166534 !important;
+}
+
+.step6-success-bubble strong {
+  color: #14532d !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .copilot-panel {
+    position: relative;
+    top: auto;
+    right: auto;
+    width: 100%;
+    margin-top: 20px;
+  }
+}
+
+
+/* Embedded slide presentation optimizations */
+html, body {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  overflow: hidden !important;
+  background: transparent !important;
+}
+
+.app-viewport {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.timesheet-window {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  border-radius: 18px !important;
+  box-shadow: none !important;
+}
+
+.top-nav {
+  height: 50px !important;
+  padding: 0 18px !important;
+}
+
+.schedule-subheader {
+  padding: 7px 18px !important;
+}
+
+.schedule-name {
+  font-size: 18px !important;
+}
+
+.status-summary-bar {
+  padding: 5px 18px !important;
+  font-size: 12.5px !important;
+}
+
+.timesheet-table th {
+  padding: 4px 6px !important;
+}
+
+.timesheet-table td {
+  padding: 4px 5px !important;
+}
+
+.cell-employee {
+  padding: 4px 12px !important;
+}
+
+.emp-avatar {
+  width: 30px !important;
+  height: 30px !important;
+  font-size: 11px !important;
+}
+
+.emp-name {
+  font-size: 13px !important;
+}
+
+.emp-sub {
+  font-size: 11px !important;
+}
+
+.shift-chip {
+  padding: 4px 6px !important;
+  font-size: 11.5px !important;
+  border-radius: 6px !important;
+}
+
+.slot-placeholder {
+  height: 28px !important;
+}
+
+.copilot-panel {
+  width: 400px !important;
+}
+
+.copilot-header {
+  padding: 10px 16px !important;
+}
+
+.copilot-title {
+  font-size: 16px !important;
+}
+
+.copilot-messages {
+  padding: 10px 14px !important;
+  row-gap: 8px !important;
+}
+
+.chat-bubble {
+  padding: 8px 12px !important;
+  font-size: 13.5px !important;
+}
+
+.ai-service-calling-card {
+  padding: 9px 12px !important;
+}
+
+.service-tasks-list {
+  row-gap: 4px !important;
+}
+
+.task-item {
+  font-size: 12px !important;
+}
+
+.copilot-footer {
+  padding: 8px 12px !important;
+}
+
+.step-guide-tag-centered {
+  bottom: 8px !important;
+  padding: 4px 12px !important;
+  font-size: 12.5px !important;
+}

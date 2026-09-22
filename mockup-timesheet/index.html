@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Base Timesheet - Lịch làm việc & Phân ca thông minh</title>
+  <meta name="description" content="Mockup demo sản phẩm Base Timesheet tích hợp Copilot AI hỗ trợ xếp ca tự động.">
+  <link rel="icon" type="image/svg+xml" href="Logo/timesheet.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-viewport">
+    <!-- Main Timesheet Container Frame -->
+    <div class="timesheet-window">
+      
+      <!-- Left Column: Main Timesheet Layout -->
+      <div class="timesheet-main-layout">
+        <!-- Top Navigation Header -->
+        <header class="top-nav">
+          <div class="nav-left">
+            <div class="app-logo">
+              <img src="Logo/timesheet.svg" alt="Base Timesheet Logo" class="app-logo-img">
+            </div>
+            <span class="app-title">Timesheet</span>
+          </div>
+
+          <div class="nav-center">
+            <div class="search-command-bar">
+              <svg class="search-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="8.5" cy="8.5" r="5.5"/>
+                <path d="M12.5 12.5L16.5 16.5"/>
+              </svg>
+              <input type="text" placeholder="Tìm kiếm hoặc chạy lệnh..." readonly id="global-search-input">
+              <kbd class="search-kbd">Ctrl+K</kbd>
+            </div>
+          </div>
+
+          <div class="nav-right">
+            <div class="top-nav-profile-badge">QL</div>
+          </div>
+        </header>
+
+        <!-- Subheader: Schedule Name & Controls -->
+        <section class="schedule-subheader">
+          <div class="sub-left">
+            <h1 class="schedule-name">All Schedules</h1>
+            <span class="dot-separator">•</span>
+            <div class="schedule-date-selector">
+              <span>September 2026</span>
+              <svg class="chevron-icon" viewBox="0 0 16 16" fill="currentColor">
+                <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+              </svg>
+            </div>
+            <div class="schedule-counter-badge">Schedules 3 of 3</div>
+          </div>
+
+          <div class="sub-right">
+            <div class="view-mode-pill">
+              <span>Month grid</span>
+              <svg class="chevron-icon" viewBox="0 0 16 16" fill="currentColor">
+                <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+              </svg>
+            </div>
+
+            <button class="btn-filter" id="btn-filter">
+              <svg class="filter-icon" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z"/>
+              </svg>
+              <span>Filter</span>
+            </button>
+
+            <button class="btn-new-shift" id="btn-new-shift">
+              <span class="plus-sign">+</span>
+              <span>New shift</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- KPI / Status Indicators Bar -->
+        <section class="status-summary-bar">
+          <div class="status-items-left">
+            <div class="status-item">
+              <span class="status-icon bar-icon">≡</span>
+              <span class="status-text"><strong>3</strong> schedules</span>
+            </div>
+            <div class="status-item">
+              <span class="status-icon link-icon">⚯</span>
+              <span class="status-text"><strong id="gaps-count">0</strong> gaps</span>
+            </div>
+            <div class="status-item">
+              <span class="status-icon clock-icon">⏱</span>
+              <span class="status-text"><strong id="open-count">0</strong> open</span>
+            </div>
+            <div class="status-item critical-item">
+              <span class="status-dot dot-red" id="critical-dot"></span>
+              <span class="status-text"><strong id="critical-count">0</strong> critical</span>
+            </div>
+            <div class="status-item warning-item">
+              <span class="status-dot dot-orange"></span>
+              <span class="status-text"><strong>0</strong> warnings</span>
+            </div>
+          </div>
+
+          <div class="status-items-right">
+            <div class="status-item unpublished-item">
+              <span class="status-icon edit-icon">✎</span>
+              <span class="status-text"><strong id="unpublished-count">42</strong> unpublished</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- AI Copilot Proposal Banner (Hiện ở Bước 3) -->
+        <div class="copilot-proposal-banner" id="copilot-proposal-banner">
+          <div class="proposal-banner-left">
+            <span class="sparkle-proposal">✦</span>
+            <span class="proposal-banner-text" id="proposal-banner-text"><strong>Copilot đề xuất lịch tuần 38</strong> - coverage đủ 6/6 ngày - 0 vi phạm constraint</span>
+          </div>
+          <div class="proposal-banner-right" id="proposal-banner-actions">
+            <div class="confirm-btn-wrapper" id="confirm-btn-wrapper">
+              <button class="btn-confirm-schedule" id="btn-confirm-schedule">Confirm, xếp lịch</button>
+              
+              <!-- Zoom to phần Confirm, xếp lịch (Bước 3->4 transition) -->
+              <div class="zoom-confirm-callout" id="zoom-confirm-callout">
+                <div class="zoom-confirm-badge">
+                  <span class="zoom-click-cursor">👆</span>
+                  <span class="zoom-confirm-text">Confirm, xếp lịch</span>
+                </div>
+                <div class="zoom-confirm-tip">Quản lý duyệt ➔ Lịch tự đăng ngay</div>
+              </div>
+            </div>
+            <button class="btn-adjust-schedule" id="btn-adjust-schedule">Điều chỉnh</button>
+          </div>
+        </div>
+
+        <!-- Banner Xanh Hoàn Thành Đăng Lịch (Chuẩn theo ảnh Bước 4) -->
+        <div class="copilot-published-banner" id="copilot-published-banner">
+          <span class="check-published-icon">✓</span>
+          <span class="published-banner-text"><strong>Đã xếp và đăng lịch tuần 38</strong> - Copilot tiếp tục theo dõi phát sinh</span>
+        </div>
+
+        <!-- Banner Cảnh Báo Phát Sinh (Chuẩn theo ảnh Bước 5) -->
+        <div class="copilot-alert-banner" id="copilot-alert-banner">
+          <span class="alert-banner-icon">⚠</span>
+          <span class="alert-banner-text"><strong>Phát sinh:</strong> Ha My được duyệt nghỉ 16/09 - ca đêm hụt 1 nhân viên</span>
+        </div>
+
+        <!-- Banner Cập Nhật Thành Công Duke Dang (Bước 6) -->
+        <div class="copilot-resolved-banner" id="copilot-resolved-banner">
+          <span class="check-published-icon">✓</span>
+          <span class="resolved-banner-text"><strong>Đã cập nhật Duke Dang thay Ha My ngày 16/09</strong> - Lịch làm việc đã đầy đủ</span>
+        </div>
+
+        <!-- Timesheet Grid View -->
+        <main class="timesheet-content">
+          <div class="grid-table-container">
+            <table class="timesheet-table">
+              <thead>
+                <tr>
+                  <th class="col-employee">Employee</th>
+                  <th class="col-day">
+                    <div class="day-name">MON</div>
+                    <div class="day-date">14</div>
+                  </th>
+                  <th class="col-day">
+                    <div class="day-name">TUE</div>
+                    <div class="day-date">15</div>
+                  </th>
+                  <th class="col-day day-today">
+                    <div class="day-name">WED</div>
+                    <div class="day-date">16</div>
+                  </th>
+                  <th class="col-day">
+                    <div class="day-name">THU</div>
+                    <div class="day-date">17</div>
+                  </th>
+                  <th class="col-day">
+                    <div class="day-name">FRI</div>
+                    <div class="day-date">18</div>
+                  </th>
+                  <th class="col-day">
+                    <div class="day-name">SAT</div>
+                    <div class="day-date">19</div>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Row 1: Open shifts -->
+                <tr class="row-open-shifts">
+                  <td class="cell-employee">
+                    <div class="emp-profile">
+                      <div class="emp-avatar avatar-os">OS</div>
+                      <div class="emp-info">
+                        <div class="emp-name">Open shifts</div>
+                        <div class="emp-sub" id="open-shifts-sub">0 unassigned</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="cell-slot"><div class="slot-placeholder"></div></td>
+                  <td class="cell-slot"><div class="slot-placeholder"></div></td>
+                  <td class="cell-slot cell-open-wed">
+                    <div class="slot-placeholder" id="placeholder-open-wed"></div>
+                    <div class="open-shift-needed-chip" id="open-shift-needed-chip">+ cần 1 • 22:00–06:00</div>
+                  </td>
+                  <td class="cell-slot"><div class="slot-placeholder"></div></td>
+                  <td class="cell-slot"><div class="slot-placeholder"></div></td>
+                  <td class="cell-slot"><div class="slot-placeholder"></div></td>
+                </tr>
+
+                <!-- Row 2: Eric Pham -->
+                <tr class="row-employee">
+                  <td class="cell-employee">
+                    <div class="emp-profile">
+                      <div class="emp-avatar avatar-ep">EP</div>
+                      <div class="emp-info">
+                        <div class="emp-name">Eric Pham</div>
+                        <div class="emp-sub">VP of People</div>
+                      </div>
+                      <span class="emp-hours">40h</span>
+                    </div>
+                  </td>
+                  <td class="cell-slot"><div class="shift-chip chip-blue">06:00–14:00</div></td>
+                  <td class="cell-slot"><div class="shift-chip chip-blue">06:00–14:00</div></td>
+                  <td class="cell-slot"><div class="shift-chip chip-blue">06:00–14:00</div></td>
+                  <td class="cell-slot"><div class="shift-chip chip-gray">Nghỉ</div></td>
+                  <td class="cell-slot"><div class="shift-chip chip-blue">06:00–14:00</div></td>
+                  <td class="cell-slot"><div class="shift-chip chip-blue">06:00–14:00</div></td>
+                </tr>
+
+                <!-- Row 3: Phuong Ha -->
+                <tr class="row-employee">
+                  <td class="cell-employee">
+                    <div class="emp-profile">
+                      <div class="emp-avatar avatar-ph">PH</div>
+                      <div class="emp-info">
+                        <div class="emp-name">Phuong Ha</div>
+                        <div class="emp-sub">Engineering</div>
+                      </div>
+                      <span class="emp-hours">40h</span>
+                    </div>
+                  </td>
+                  <td class="cell-slot"><div class="shift-chip chip-blue">06:00–14:00</div></td>
+                  <td class="cell-slot"><div class="shift-chip chip-blue">06:00–14:00</div></td>
+                  <td class="cell-slot"><div class="shift-chip chip-blue">06:00–14:00</div></td>
+                  <td class="cell-slot"><div class="shift-chip chip-blue">06:00–14:00</div></td>
+                  <td class="cell-slot"><div class="shift-chip chip-blue">06:00–14:00</div></td>
+                  <td class="cell-slot"><div class="shift-chip chip-gray">Nghỉ</div></td>
+                </tr>
+
+                <!-- Row 4: Minh Quyen Khuat -->
+                <tr class="row-employee">
+                  <td class="cell-employee">
+                    <div class="emp-profile">
+                      <div class="emp-avatar avatar-mq">MQ</div>
+                      <div class="emp-info">
+                        <div class="emp-name">Minh Quyen Khuat</div>
+                        <div class="emp-sub">Senior Soft...</div>
+                      </div>
+                      <span class="emp-hours">40h</span>
+                    </div>
+                  </td>
+                  <td class="cell-slot"><div class="shift-chip chip-green">06:00–14:00</div></td>
+                  <td class="cell-slot"><div class="shift-chip chip-green">06:00–14:00</div></td>
+                  <td class="cell-slot"><div class="shift-chip chip-green">06:00–14:00</div></td>
+                  <td class="cell-slot"><div class="shift-chip chip-green">06:00–14:00</div></td>
+                  <td class="cell-slot"><div class="shift-chip chip-gray">Nghỉ</div></td>
+                  <td class="cell-slot"><div class="shift-chip chip-green">06:00–14:00</div></td>
+                </tr>
+
+                <!-- Row 5: Brian Tr -->
+                <tr class="row-employee">
+                  <td class="cell-employee">
+                    <div class="emp-profile">
+                      <div class="emp-avatar avatar-bt">BT</div>
+                      <div class="emp-info">
+                        <div class="emp-name">Brian Tr</div>
+                        <div class="emp-sub">Product De...</div>
+                      </div>
+                      <span class="emp-hours">40h</span>
+                    </div>
+                  </td>
+                  <td class="cell-slot"><div class="shift-chip chip-teal">14:00–22:00</div></td>
+                  <td class="cell-slot"><div class="shift-chip chip-teal">14:00–22:00</div></td>
+                  <td class="cell-slot"><div class="shift-chip chip-teal">14:00–22:00</div></td>
+                  <td class="cell-slot"><div class="shift-chip chip-teal">14:00–22:00</div></td>
+                  <td class="cell-slot"><div class="shift-chip chip-teal">14:00–22:00</div></td>
+                  <td class="cell-slot"><div class="shift-chip chip-teal">14:00–22:00</div></td>
+                </tr>
+
+                <!-- Row 6: Ha My -->
+                <tr class="row-employee">
+                  <td class="cell-employee">
+                    <div class="emp-profile">
+                      <div class="emp-avatar avatar-hm">HM</div>
+                      <div class="emp-info">
+                        <div class="emp-name">Ha My</div>
+                        <div class="emp-sub">Operations</div>
+                      </div>
+                      <span class="emp-hours">40h</span>
+                    </div>
+                  </td>
+                  <td class="cell-slot"><div class="shift-chip chip-purple">22:00–06:00</div></td>
+                  <td class="cell-slot"><div class="shift-chip chip-purple">22:00–06:00</div></td>
+                  <td class="cell-slot cell-hamy-wed">
+                    <div class="shift-chip chip-purple" id="chip-hamy-shift">22:00–06:00</div>
+                    <div class="shift-chip chip-gray chip-leave" id="chip-hamy-leave">Nghỉ phép</div>
+                  </td>
+                  <td class="cell-slot"><div class="shift-chip chip-purple">22:00–06:00</div></td>
+                  <td class="cell-slot"><div class="shift-chip chip-purple">22:00–06:00</div></td>
+                  <td class="cell-slot"><div class="shift-chip chip-gray">Nghỉ</div></td>
+                </tr>
+
+                <!-- Row 7: Duke Dang -->
+                <tr class="row-employee">
+                  <td class="cell-employee">
+                    <div class="emp-profile">
+                      <div class="emp-avatar avatar-dd">DD</div>
+                      <div class="emp-info">
+                        <div class="emp-name">Duke Dang</div>
+                        <div class="emp-sub">QA</div>
+                      </div>
+                      <span class="emp-hours" id="dukedang-hours">40h</span>
+                    </div>
+                  </td>
+                  <td class="cell-slot"><div class="shift-chip chip-purple">22:00–06:00</div></td>
+                  <td class="cell-slot"><div class="shift-chip chip-purple">22:00–06:00</div></td>
+                  <td class="cell-slot cell-dukedang-wed">
+                    <div class="shift-chip chip-gray" id="chip-dukedang-rest">Nghỉ</div>
+                    <div class="shift-chip chip-purple" id="chip-dukedang-shift" style="display: none;">22:00–06:00</div>
+                  </td>
+                  <td class="cell-slot"><div class="shift-chip chip-purple">22:00–06:00</div></td>
+                  <td class="cell-slot"><div class="shift-chip chip-purple">22:00–06:00</div></td>
+                  <td class="cell-slot"><div class="shift-chip chip-purple">22:00–06:00</div></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- POPUP PHÓNG TO PHẦN THỜI GIAN (BƯỚC 3) -->
+          <div class="zoom-schedule-popup" id="zoom-schedule-popup">
+            <div class="zoom-popup-content">
+              <table class="zoom-table">
+                <tbody>
+                  <!-- Zoom Row 1 -->
+                  <tr>
+                    <td class="zoom-cell-hours"><span class="zoom-hours-badge">40h</span></td>
+                    <td><div class="zoom-chip chip-blue">06:00–14:00</div></td>
+                    <td><div class="zoom-chip chip-blue">06:00–14:00</div></td>
+                    <td><div class="zoom-chip chip-blue">06:00–14:00</div></td>
+                    <td><div class="zoom-chip chip-gray">Nghỉ</div></td>
+                  </tr>
+                  <!-- Zoom Row 2 -->
+                  <tr>
+                    <td class="zoom-cell-hours"><span class="zoom-hours-badge">40h</span></td>
+                    <td><div class="zoom-chip chip-blue">06:00–14:00</div></td>
+                    <td><div class="zoom-chip chip-blue">06:00–14:00</div></td>
+                    <td><div class="zoom-chip chip-blue">06:00–14:00</div></td>
+                    <td><div class="zoom-chip chip-blue">06:00–14:00</div></td>
+                  </tr>
+                  <!-- Zoom Row 3 -->
+                  <tr>
+                    <td class="zoom-cell-hours"><span class="zoom-hours-badge">40h</span></td>
+                    <td><div class="zoom-chip chip-green">06:00–14:00</div></td>
+                    <td><div class="zoom-chip chip-green">06:00–14:00</div></td>
+                    <td><div class="zoom-chip chip-green">06:00–14:00</div></td>
+                    <td><div class="zoom-chip chip-green">06:00–14:00</div></td>
+                  </tr>
+                  <!-- Zoom Row 4 -->
+                  <tr>
+                    <td class="zoom-cell-hours"><span class="zoom-hours-badge">40h</span></td>
+                    <td><div class="zoom-chip chip-teal">14:00–22:00</div></td>
+                    <td><div class="zoom-chip chip-teal">14:00–22:00</div></td>
+                    <td><div class="zoom-chip chip-teal">14:00–22:00</div></td>
+                    <td><div class="zoom-chip chip-teal">14:00–22:00</div></td>
+                  </tr>
+                  <!-- Zoom Row 5 -->
+                  <tr>
+                    <td class="zoom-cell-hours"><span class="zoom-hours-badge">40h</span></td>
+                    <td><div class="zoom-chip chip-purple">22:00–06:00</div></td>
+                    <td><div class="zoom-chip chip-purple">22:00–06:00</div></td>
+                    <td><div class="zoom-chip chip-purple">22:00–06:00</div></td>
+                    <td><div class="zoom-chip chip-purple">22:00–06:00</div></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </main>
+      </div>
+
+      <!-- Right Column: Box Chat AI chiếm full màn hình bên phải -->
+      <aside class="copilot-panel" id="copilot-panel">
+        <div class="copilot-card">
+          <!-- Chat Header: Purple Icon + Schedule Copilot -->
+          <div class="copilot-header">
+            <div class="copilot-brand">
+              <div class="copilot-icon-badge">
+                <svg viewBox="0 0 24 24" fill="currentColor" class="sparkle-svg">
+                  <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z"/>
+                </svg>
+              </div>
+              <h2 class="copilot-title">Schedule Copilot</h2>
+            </div>
+          </div>
+
+          <!-- Chat Conversation Area -->
+          <div class="copilot-messages" id="copilot-messages">
+            <!-- User Message Bubble + Manager Avatar QL (Hiện ở Bước 1) -->
+            <div class="message-row user-message-row" id="first-user-message-row">
+              <div class="chat-bubble user-bubble blue-bubble" id="copilot-user-bubble">
+                <span class="bubble-text" id="bubble-text-content">Xếp ca tuần này giúp tôi.</span>
+              </div>
+              <div class="user-avatar-badge-ql" title="Quản lý">QL</div>
+            </div>
+
+            <!-- Step 1 AI Thinking State (Ẩn khi sang Bước 2/3) -->
+            <div class="ai-status-card" id="ai-status-card">
+              <div class="ai-status-indicator">
+                <svg class="status-spinner" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="9" stroke-dasharray="14 6" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <span class="ai-status-text">Reviewing the timesheet</span>
+            </div>
+
+            <!-- Step 2 & 3: AI Service Execution Box (Context Reading) -->
+            <div class="ai-service-calling-card" id="ai-service-calling-card">
+              <!-- AI Header with Icon -->
+              <div class="service-calling-header">
+                <div class="service-context-title">
+                  <div class="ai-mini-icon">✦</div>
+                  <span class="service-title-text">Đang đọc ngữ cảnh của tuần:</span>
+                </div>
+              </div>
+
+              <!-- Sequential Tasks List -->
+              <div class="service-tasks-list" id="service-tasks-list">
+                <!-- Task 1 -->
+                <div class="task-item completed" data-task="1">
+                  <div class="task-icon-wrap"><span class="task-check">✓</span></div>
+                  <div class="task-label"><span>Lấy thông tin Schedule Service</span></div>
+                </div>
+
+                <!-- Task 2 -->
+                <div class="task-item completed" data-task="2">
+                  <div class="task-icon-wrap"><span class="task-check">✓</span></div>
+                  <div class="task-label"><span>Đọc Pattern:</span> <strong>3 ca, 4 kíp</strong></div>
+                </div>
+
+                <!-- Task 3 -->
+                <div class="task-item completed" data-task="3">
+                  <div class="task-icon-wrap"><span class="task-check">✓</span></div>
+                  <div class="task-label"><span>Đọc Constraint:</span> <strong>40h/tuần, ≤3 ca đêm</strong></div>
+                </div>
+
+                <!-- Task 4 -->
+                <div class="task-item completed" data-task="4">
+                  <div class="task-icon-wrap"><span class="task-check">✓</span></div>
+                  <div class="task-label"><span>Đọc Coverage:</span> <strong>3 QL, 4-5 NV, 2 QA</strong></div>
+                </div>
+
+                <!-- Task 5 -->
+                <div class="task-item completed" data-task="5">
+                  <div class="task-icon-wrap"><span class="task-check">✓</span></div>
+                  <div class="task-label"><span>Đọc Time-off tuần này:</span> <strong>3 đơn</strong></div>
+                </div>
+
+                <!-- Task 6 -->
+                <div class="task-item completed" data-task="6">
+                  <div class="task-icon-wrap"><span class="task-check">✓</span></div>
+                  <div class="task-label"><span>Đọc Unavailable tuần này:</span> <strong>1</strong></div>
+                </div>
+              </div>
+
+              <!-- Footer pill inside Card -->
+              <div class="service-calling-footer">
+                <span class="service-pill-outline">⚙ ĐANG GỌI SERVICE - SCHEDULE</span>
+              </div>
+            </div>
+
+            <!-- Step 3: AI Proposal Final Message Bubble -->
+            <div class="ai-proposal-message-row" id="ai-proposal-message-row">
+              <div class="ai-mini-avatar-wrap">
+                <div class="ai-avatar-square">✦</div>
+              </div>
+              <div class="ai-proposal-bubble">
+                <p>Lịch đề xuất đã sẵn ở màn bên, <strong>nhóm theo ca</strong>. Anh confirm là hệ thống tự xếp.</p>
+              </div>
+            </div>
+
+            <!-- Step 4: Quản lý chat "Confirm." & AI phản hồi hoàn thành chuẩn ảnh -->
+            <div class="step4-chat-flow" id="step4-chat-flow">
+              <!-- User confirms: Confirm. in soft blue bubble -->
+              <div class="message-row user-message-row">
+                <div class="chat-bubble user-bubble confirm-pill-bubble">
+                  <span class="bubble-text">Confirm.</span>
+                </div>
+                <div class="user-avatar-badge-ql-light" title="Quản lý">QL</div>
+              </div>
+
+              <!-- AI confirms: Đã xếp và đăng lịch tuần 38 ✓ -->
+              <div class="ai-proposal-message-row">
+                <div class="ai-mini-avatar-wrap">
+                  <div class="ai-avatar-square">✦</div>
+                </div>
+                <div class="ai-proposal-bubble final-published-bubble">
+                  <p>Đã xếp và đăng lịch tuần 38 ✓</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 5: Quản lý phát sinh: Ha My nghỉ T4, hụt 1 ca đêm (Khối cảnh báo phát sinh) -->
+            <div class="step5-issue-flow" id="step5-issue-flow">
+              <div class="step5-alert-card">
+                <div class="step5-alert-body">
+                  <span class="step5-highlight-red">Phát sinh:</span> Ha My vừa được duyệt nghỉ T4. Ca đêm T4 hụt 1 nhân viên so với coverage.
+                </div>
+                <div class="step5-service-footer">
+                  <span class="service-pill-outline coverage-pill" id="step5-service-pill">⚙ ĐANG GỌI SERVICE - COVERAGE CHECK</span>
+                </div>
+              </div>
+
+              <!-- AI Suggestion Message: Người thay phù hợp nhất: Duke Dang... -->
+              <div class="ai-proposal-message-row step5-ai-suggestion" id="step5-ai-suggestion">
+                <div class="ai-mini-avatar-wrap">
+                  <div class="ai-avatar-square">✦</div>
+                </div>
+                <div class="ai-proposal-bubble step5-suggestion-bubble">
+                  <p>Người thay phù hợp nhất: <strong>Duke Dang</strong>, cùng kíp Đêm, còn 8h trong tuần, đủ giờ nghỉ. Anh chọn là tôi cập nhật lịch.</p>
+                  <div class="step5-action-row">
+                    <button class="btn-choose-replacement" id="btn-choose-duke">Chọn Duke Dang</button>
+                    <button class="btn-cancel-replacement">Xem người khác</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 6: Quản lý chọn Duke Dang & AI cập nhật lịch thành công -->
+            <div class="step6-chat-flow" id="step6-chat-flow">
+              <!-- User Message: Chọn Duke Dang -->
+              <div class="message-row user-message-row">
+                <div class="chat-bubble user-bubble confirm-pill-bubble choose-duke-user-bubble">
+                  <span class="bubble-text">Chọn Duke Dang</span>
+                </div>
+                <div class="user-avatar-badge-ql" title="Quản lý">QL</div>
+              </div>
+
+              <!-- AI Response: Đã cập nhật lịch và thông báo cho Duke Dang... -->
+              <div class="ai-proposal-message-row">
+                <div class="ai-mini-avatar-wrap">
+                  <div class="ai-avatar-square">✦</div>
+                </div>
+                <div class="ai-proposal-bubble final-published-bubble step6-success-bubble">
+                  <p>Đã cập nhật lịch và thông báo cho <strong>Duke Dang</strong>. Lịch làm việc đã đầy đủ.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Chat Footer / Prompt Input Area -->
+          <div class="copilot-footer">
+            <div class="copilot-input-container">
+              <input 
+                type="text" 
+                class="copilot-input" 
+                id="copilot-input"
+                placeholder="Hỏi về lịch, ca kíp, phát sinh..." 
+                value=""
+              />
+              <button class="copilot-send-btn" id="btn-send-copilot" aria-label="Gửi câu hỏi">
+                <svg viewBox="0 0 20 20" fill="currentColor" class="send-icon">
+                  <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Step Guide Tag Banner (Dưới cùng ở giữa màn hình) -->
+      <div class="step-guide-tag-centered" id="step-guide-tag">
+        <button class="step-nav-arrow" id="btn-prev-step" title="Quay lại bước trước">‹</button>
+        <div class="step-badge-number" id="step-badge-number">1</div>
+        <div class="step-badge-text" id="step-guide-text">Quản lý yêu cầu Copilot xếp ca tuần</div>
+        <button class="step-nav-arrow" id="btn-next-step" title="Chuyển bước kế tiếp">›</button>
+        <button class="step-nav-btn step-play-pause-btn" id="btn-play-pause" title="Tạm dừng / Tiếp tục tự chạy">⏸</button>
+        <button class="step-nav-btn step-replay-btn" id="btn-replay-step" title="Phát lại từ Bước 1">↺</button>
+        <div class="step-progress-bar" id="step-progress-bar"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
